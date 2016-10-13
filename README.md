@@ -1,5 +1,5 @@
 # IgPy
-IG Labs REST &amp; Streaming API (in development)
+IG Labs REST &amp; Streaming API (in development).
 This library is still in development therefore this ins't ready for production systems.
 
 ### Install
