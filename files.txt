@@ -1,9 +1,0 @@
-C:\Users\Luke\Anaconda3\Lib\site-packages\igpy\lightstreamer.py
-C:\Users\Luke\Anaconda3\Lib\site-packages\igpy\rest_api.py
-C:\Users\Luke\Anaconda3\Lib\site-packages\igpy\streaming_api.py
-C:\Users\Luke\Anaconda3\Lib\site-packages\igpy\__init__.py
-C:\Users\Luke\Anaconda3\Lib\site-packages\igpy\__pycache__\lightstreamer.cpython-35.pyc
-C:\Users\Luke\Anaconda3\Lib\site-packages\igpy\__pycache__\rest_api.cpython-35.pyc
-C:\Users\Luke\Anaconda3\Lib\site-packages\igpy\__pycache__\streaming_api.cpython-35.pyc
-C:\Users\Luke\Anaconda3\Lib\site-packages\igpy\__pycache__\__init__.cpython-35.pyc
-C:\Users\Luke\Anaconda3\Lib\site-packages\IgPy-0.0.1-py3.5.egg-info
