@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/luketighe/IgPy.svg?branch=master)](https://travis-ci.org/luketighe/IgPy)
+
 # IgPy
 IG Labs REST &amp; Streaming API (in development).
 This library is still in development therefore this ins't ready for production systems.
