@@ -26,10 +26,6 @@ class IGRestApi(object):
         self.lightstreamer_endpoint = None
         self.cst_token = None
         self.security_token = None
-
-
-    def retry(self, retryMethod):
-        return retryMethod
     
     def login(self):
 
@@ -68,7 +64,7 @@ class IGRestApi(object):
         provided on the constructor.
 
         Returns:
-            True for success. Throws PermissionError on failure.
+            True for collection of markets. Throws PermissionError on failure.
 
         """
 
@@ -83,7 +79,7 @@ class IGRestApi(object):
         response = requests.get(self.base_url + 'markets?searchTerm=' + search_term,  headers=header)
 
         if response.status_code == 200:
-            t=0
+            return response.json()['markets']
         else:
             raise PermissionError('Could not log in. Http code: ' + response.status_code)
 
@@ -102,5 +98,93 @@ class IGRestApi(object):
 
         if response.status_code == 200:
             return response.json()['prices']
+        else:
+            print('Error: Could not get market prices. Http code: ' + response.status_code)
+
+    def positions(self):
+
+        header = {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json; charset=UTF-8',
+            'X-IG-API-KEY': self.api_key,
+            'CST': self.cst_token,
+            'X-SECURITY-TOKEN': self.security_token,
+            'Version': 2
+        }
+
+        response = requests.get(self.base_url + 'positions', headers=header)
+
+        if response.status_code == 200:
+            return response.json()['positions']
+        else:
+            print('Error: Could not get market prices. Http code: ' + response.status_code)
+
+    def position(self, deal_ref):
+
+        header = {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json; charset=UTF-8',
+            'X-IG-API-KEY': self.api_key,
+            'CST': self.cst_token,
+            'X-SECURITY-TOKEN': self.security_token,
+            'Version': 2
+        }
+
+        response = requests.get(self.base_url + 'positions/' + deal_ref, headers=header)
+
+        if response.status_code == 200:
+            return response.json()['position']
+        else:
+            print('Error: Could not get market prices. Http code: ' + response.status_code)
+
+    def long_market_order(self, deal_ref, epic, size, currency_code='GBP', expiry='DFB'):
+
+        payload = {
+            'dealReference': deal_ref,
+            'direction': 'BUY',
+            'epic': epic,
+            'expiry': expiry,
+            'forceOpen': True,
+            'orderType': 'MARKET',
+            'size': size,
+            'guaranteedStop': False,
+            'currencyCode': currency_code
+        }
+
+        return self.otc_position(payload)
+
+    def short_market_order(self, deal_ref, epic, size, currency_code='GBP', expiry='DFB'):
+
+        payload = {
+            'dealReference': deal_ref,
+            'direction': 'SELL',
+            'epic': epic,
+            'expiry': expiry,
+            'forceOpen': True,
+            'orderType': 'MARKET',
+            'size': size,
+            'guaranteedStop': False,
+            'currencyCode': currency_code
+        }
+
+        return self.otc_position(payload)
+
+    #def long_limit_order(self, ):
+
+    def otc_position(self, payload):
+
+        header = {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json; charset=UTF-8',
+            'X-IG-API-KEY': self.api_key,
+            'CST': self.cst_token,
+            'X-SECURITY-TOKEN': self.security_token,
+            'Version': 2
+        }
+
+        response = requests.post(self.base_url + 'positions/otc', data=json.dumps(payload), headers=header)
+
+        if response.status_code == 200:
+            return response.json()['dealReference']
         else:
             print('Error: Could not get market prices. Http code: ' + response.status_code)
