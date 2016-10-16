@@ -13,5 +13,8 @@ setup(cmdclass={'build_py': build_py},
       url='https://github.com/luketighe/IgPy',
       license='BSD License',
       packages=['igpy'],
-      platforms=['3.5.*']
+      platforms=['3.5.*'],
+      install_requires=[
+          'requests',
+      ],
     )
