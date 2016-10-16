@@ -30,6 +30,6 @@ class IGRestApiTest(unittest.TestCase):
         self.assertTrue('Could not log in. Http code: 400' in str(context.exception))
 
 
-    def test_should_login_and_return_true(selfself, requests_mock):
+    #def test_should_login_and_return_true(selfself, requests_mock):
         # arrange
-        requests_mock.side_effect
+        #requests_mock.side_effect
