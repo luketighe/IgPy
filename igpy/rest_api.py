@@ -90,11 +90,10 @@ class IGRestApi(object):
             'X-IG-API-KEY': self.api_key,
             'CST': self.cst_token,
             'X-SECURITY-TOKEN': self.security_token,
-            'Version': 2
+            'Version': '2'
         }
 
-        response = requests.get(self.base_url + 'prices/' + epic + '/' + resolution + '/' + str(num_points),
-                                headers=header)
+        response = requests.get(self.base_url + 'prices/' + epic + '/' + resolution + '/' + str(num_points), headers=header)
 
         if response.status_code == 200:
             return response.json()['prices']
@@ -109,7 +108,7 @@ class IGRestApi(object):
             'X-IG-API-KEY': self.api_key,
             'CST': self.cst_token,
             'X-SECURITY-TOKEN': self.security_token,
-            'Version': 2
+            'Version': '2'
         }
 
         response = requests.get(self.base_url + 'positions', headers=header)
@@ -127,7 +126,7 @@ class IGRestApi(object):
             'X-IG-API-KEY': self.api_key,
             'CST': self.cst_token,
             'X-SECURITY-TOKEN': self.security_token,
-            'Version': 2
+            'Version': '2'
         }
 
         response = requests.get(self.base_url + 'positions/' + deal_ref, headers=header)
@@ -179,7 +178,7 @@ class IGRestApi(object):
             'X-IG-API-KEY': self.api_key,
             'CST': self.cst_token,
             'X-SECURITY-TOKEN': self.security_token,
-            'Version': 1,
+            'Version': '1',
             '_method': 'DELETE'
         }
 
@@ -212,7 +211,7 @@ class IGRestApi(object):
             'X-IG-API-KEY': self.api_key,
             'CST': self.cst_token,
             'X-SECURITY-TOKEN': self.security_token,
-            'Version': 2
+            'Version': '2'
         }
 
         response = requests.post(self.base_url + 'positions/otc', data=json.dumps(payload), headers=header)
