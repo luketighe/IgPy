@@ -3,7 +3,6 @@ import json
 
 
 class IGRestApi(object):
-
     def __init__(self, identifier, password, api_key, url, retry=1):
 
         """Ctor for IG Labs REST API
@@ -26,7 +25,7 @@ class IGRestApi(object):
         self.lightstreamer_endpoint = None
         self.cst_token = None
         self.security_token = None
-    
+
     def login(self):
 
         """Logs into the IG REST Url using the credentials
@@ -76,12 +75,12 @@ class IGRestApi(object):
             'X-SECURITY-TOKEN': self.security_token
         }
 
-        response = requests.get(self.base_url + 'markets?searchTerm=' + search_term,  headers=header)
+        response = requests.get(self.base_url + 'markets?searchTerm=' + search_term, headers=header)
 
         if response.status_code == 200:
             return response.json()['markets']
         else:
-            raise PermissionError('Could not log in. Http code: ' + response.status_code)
+            raise PermissionError('Could not perform a market search. Http code: ' + str(response.status_code) + " Error: " + response.text)
 
     def market_prices(self, epic, resolution, num_points):
 
@@ -94,7 +93,8 @@ class IGRestApi(object):
             'Version': 2
         }
 
-        response = requests.get(self.base_url + 'prices/' + epic + '/' + resolution + '/' + str(num_points), headers=header)
+        response = requests.get(self.base_url + 'prices/' + epic + '/' + resolution + '/' + str(num_points),
+                                headers=header)
 
         if response.status_code == 200:
             return response.json()['prices']
@@ -135,7 +135,7 @@ class IGRestApi(object):
         if response.status_code == 200:
             return response.json()['position']
         else:
-            print('Error: Could not get market prices. Http code: ' + response.status_code)
+            print('Error: Could not get market prices. Http code: ' + str(response.status_code) + " Error: " + response.text)
 
     def long_market_order(self, deal_ref, epic, size, currency_code='GBP', expiry='DFB'):
 
@@ -169,7 +169,40 @@ class IGRestApi(object):
 
         return self.otc_position(payload)
 
-    #def long_limit_order(self, ):
+    def close_all_market_orders(self):
+
+        positions = self.positions()
+
+        header = {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json; charset=UTF-8',
+            'X-IG-API-KEY': self.api_key,
+            'CST': self.cst_token,
+            'X-SECURITY-TOKEN': self.security_token,
+            'Version': 1,
+            '_method': 'DELETE'
+        }
+
+        for position in positions:
+
+            direction = None
+            if position["position"]["direction"] == 'BUY':
+                direction = 'SELL'
+            if position["position"]["direction"] == 'SELL':
+                direction = 'BUY'
+
+            payload = {
+                'dealId': position["position"]["dealId"],
+                'direction': direction,
+                'orderType': 'MARKET',
+                'size': position["position"]["size"],
+            }
+
+            response = requests.post(self.base_url + 'positions/otc', data=json.dumps(payload), headers=header)
+
+            if response.status_code != 200:
+                print('Error: Could not close MARKET orders. Http code: ' + str(
+                    response.status_code) + " Error: " + response.text)
 
     def otc_position(self, payload):
 
@@ -187,4 +220,4 @@ class IGRestApi(object):
         if response.status_code == 200:
             return response.json()['dealReference']
         else:
-            print('Error: Could not get market prices. Http code: ' + response.status_code)
+            print('Error: Could not get market prices. Http code: ' + str(response.status_code) + " Error: " + response.text)
